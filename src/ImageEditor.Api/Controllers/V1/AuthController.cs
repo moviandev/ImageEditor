@@ -1,6 +1,9 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Amazon;
+using Amazon.SecretsManager;
+using Amazon.SecretsManager.Model;
 using ImageEditor.Api.Dtos.Users;
 using ImageEditor.Api.Settings;
 using ImageEditor.Business.Interfaces;
@@ -103,6 +106,20 @@ public class AuthController : BaseController
 
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(_identitySettings.Secret);
+
+        if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
+        {
+            var secretsManager = new AmazonSecretsManagerClient(region: RegionEndpoint.USEast1);
+
+            var secretRequest = new GetSecretValueRequest
+            {
+                SecretId = "ImageEditor.API_IdentitySettings__Secret"
+            };
+
+            var secretValue = secretsManager.GetSecretValueAsync(secretRequest).Result;
+            key = Encoding.ASCII.GetBytes(secretValue.SecretString);
+        }
+
         var token = tokenHandler.CreateToken(new SecurityTokenDescriptor
         {
             Issuer = _identitySettings.Issuer,
