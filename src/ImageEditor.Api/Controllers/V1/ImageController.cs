@@ -63,7 +63,7 @@ public class ImageController : BaseController
         return CustomResponse(userId);
     }
 
-    [HttpPost("GetAllImages")]
+    [HttpGet("GetAllImages")]
     public async Task<ActionResult<IEnumerable<ImageResponseDto>>> GetAllImagesAsync(Guid userId)
     {
         if (Guid.Empty == userId)
