@@ -28,7 +28,7 @@ public class ImageController : BaseController
         _logger = logger;
     }
 
-    [HttpPost("AddEffect")]
+    [HttpPost("ApplyEffect")]
     public async Task<ActionResult<Guid>> AddEffectAsync([FromForm] ImageDto file)
     {
         if (!ModelState.IsValid) CustomResponse(ModelState);
