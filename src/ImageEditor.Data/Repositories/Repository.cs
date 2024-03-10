@@ -28,6 +28,12 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
         await SaveChangesAsync();
     }
 
+    public virtual async Task UpdateAsync(TEntity entity)
+    {
+        DbSet.Update(entity);
+        await SaveChangesAsync();
+    }
+
     public async Task<int> SaveChangesAsync()
     {
         return await Db.SaveChangesAsync();

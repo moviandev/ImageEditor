@@ -18,9 +18,12 @@ public class UserRepository : Repository<User>, IUserRepository
         var user = await DbSet
             .Include(u => u.Images)
             .FirstOrDefaultAsync(u => u.Id == id);
-        return user.Images;
+        return user?.Images;
     }
 
     public async Task<User> GetUserByEmailAsync(string email)
-        => await DbSet.Include(u => u.Images).FirstOrDefaultAsync(u => u.Email == email);
+        => await DbSet
+        .Include(u => u.Images)
+        .AsNoTracking()
+        .FirstOrDefaultAsync(u => u.Email == email);
 }

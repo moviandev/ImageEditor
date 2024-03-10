@@ -14,7 +14,15 @@ public class User : Entity
     public string Email { get; protected set; }
 
     // Relationship with images
-    public virtual List<Image> Images { get; protected set; }
+    public List<Image> Images { get; set; }
+
+    public void AddImages(params Image[] images)
+    {
+        if (images is not null)
+            Images.AddRange(images);
+        else
+            Images = new List<Image>(images);
+    }
 
     public static class Builder
     {

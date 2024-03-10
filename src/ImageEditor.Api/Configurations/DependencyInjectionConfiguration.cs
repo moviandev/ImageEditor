@@ -8,6 +8,7 @@ using ImageEditor.Data.Contexts;
 using ImageEditor.Data.Repositories;
 using Amazon.S3;
 using Amazon.SecretsManager;
+using ImageEditor.Business.Models;
 
 namespace ImageEditor.Api.Configurations;
 public static class DependencyInjectionConfiguration
@@ -25,6 +26,7 @@ public static class DependencyInjectionConfiguration
         // Repositories
         services.AddScoped<ImageEditorContext>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IImageRepository, ImageRepository>();
 
         services.AddScoped<INotifier, Notifier>();
 

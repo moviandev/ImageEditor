@@ -8,6 +8,10 @@ public class Image : Entity
         UserId = userId;
     }
 
+    public Image()
+    {
+    }
+
     public string S3OriginalImage { get; protected set; }
     public string S3EditedImage { get; protected set; }
     public Guid UserId { get; protected set; }

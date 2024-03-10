@@ -17,15 +17,18 @@ namespace ImageEditor.Api.Controllers.V1;
 public class ImageController : BaseController
 {
     private readonly IUserRepository _userRepository;
+    private readonly IImageRepository _imageRepository;
     private readonly ILogger _logger;
 
     public ImageController(INotifier notifier,
         IIdentityUser identityUser,
         IUserRepository userRepository,
-        ILogger<ImageController> logger) : base(notifier, identityUser)
+        ILogger<ImageController> logger,
+        IImageRepository imageRepository) : base(notifier, identityUser)
     {
         _userRepository = userRepository;
         _logger = logger;
+        _imageRepository = imageRepository;
     }
 
     [HttpPost("ApplyEffect")]
@@ -33,16 +36,22 @@ public class ImageController : BaseController
     {
         if (!ModelState.IsValid) CustomResponse(ModelState);
         var email = IdentityUser.GetUserEmail();
-
-        var user = await _userRepository.GetUserByEmailAsync(email);
-        if (user is null)
-            Business.Models.User.Builder.Create(email);
-
+        var userId = Guid.Empty;
         try
         {
+            var user = await _userRepository.GetUserByEmailAsync(email);
+            if (user is null)
+            {
+                user = Business.Models.User.Builder.Create(email);
+                userId = user.Id;
+                await _userRepository.AddAsync(user);
+            }
+            else
+                userId = user.Id;
+
             var (originUri, editedUri) = await ApplyEffectAsync(file.Image, file.Effect);
-            user.Images.Add(Image.Builder.Create(originUri, editedUri, user.Id));
-            await _userRepository.AddAsync(user);
+            var newImage = Image.Builder.Create(originUri, editedUri, user.Id);
+            await _imageRepository.AddAsync(newImage);
         }
         catch (Exception ex)
         {
@@ -51,8 +60,7 @@ public class ImageController : BaseController
             return CustomResponse();
         }
 
-
-        return CustomResponse(user.Id);
+        return CustomResponse(userId);
     }
 
     [HttpPost("GetAllImages")]
