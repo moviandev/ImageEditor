@@ -6,7 +6,6 @@ using ImageEditor.Api.Settings;
 using ImageEditor.Data.Contexts;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 
 namespace ImageEditor.Api.Configurations;
@@ -28,7 +27,7 @@ public static class IdentityConfiguration
 
         if (environment.IsProduction())
         {
-            var secretsManager = new AmazonSecretsManagerClient(region: RegionEndpoint.SAEast1);
+            var secretsManager = new AmazonSecretsManagerClient(region: RegionEndpoint.USEast1);
 
             var secretRequest = new GetSecretValueRequest
             {

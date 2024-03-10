@@ -1,4 +1,3 @@
-using System.Text;
 using Amazon;
 using Amazon.SecretsManager;
 using Amazon.SecretsManager.Model;
@@ -16,7 +15,7 @@ public static class DataIoC
 
         if (isProduction)
         {
-            var secretsManager = new AmazonSecretsManagerClient(region: RegionEndpoint.SAEast1);
+            var secretsManager = new AmazonSecretsManagerClient(region: RegionEndpoint.USEast1);
 
             var secretRequest = new GetSecretValueRequest
             {
