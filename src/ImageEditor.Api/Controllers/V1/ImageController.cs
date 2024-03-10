@@ -153,7 +153,7 @@ public class ImageController : BaseController
         {
             var transferUtility = new TransferUtility(new AmazonS3Client(region: RegionEndpoint.USEast1));
             await transferUtility.UploadAsync(image, "image-editor", imageName);
-            uri = $"https://image-editor.s3-{RegionEndpoint.SAEast1.SystemName}.amazonaws.com/{imageName}";
+            uri = $"https://image-editor.s3.amazonaws.com/{imageName}";
         }
         catch (Exception ex)
         {
