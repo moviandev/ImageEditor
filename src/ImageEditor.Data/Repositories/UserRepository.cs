@@ -20,4 +20,7 @@ public class UserRepository : Repository<User>, IUserRepository
             .FirstOrDefaultAsync(u => u.Id == id);
         return user.Images;
     }
+
+    public async Task<User> GetUserByEmailAsync(string email)
+        => await DbSet.Include(u => u.Images).FirstOrDefaultAsync(u => u.Email == email);
 }

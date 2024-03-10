@@ -13,11 +13,6 @@ namespace ImageEditor.Data.Mappings
             builder.HasKey(e => e.Id);
 
             builder
-                .Property(e => e.Name)
-                .IsRequired()
-                .HasColumnType("varchar(250)");
-
-            builder
                 .Property(e => e.Email)
                 .IsRequired()
                 .HasColumnType("varchar(250)");

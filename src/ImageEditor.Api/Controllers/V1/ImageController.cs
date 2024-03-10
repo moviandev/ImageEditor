@@ -32,8 +32,11 @@ public class ImageController : BaseController
     public async Task<ActionResult<Guid>> AddEffectAsync([FromForm] ImageDto file)
     {
         if (!ModelState.IsValid) CustomResponse(ModelState);
+        var email = IdentityUser.GetUserEmail();
 
-        var user = Business.Models.User.Builder.Create(IdentityUser.GetUserEmail(), IdentityUser.GetUserEmail());
+        var user = await _userRepository.GetUserByEmailAsync(email);
+        if (user is null)
+            Business.Models.User.Builder.Create(email);
 
         try
         {
@@ -130,6 +133,7 @@ public class ImageController : BaseController
             sixLabors.Mutate(s => s.Vignette());
 
         using var outputImg = new MemoryStream();
+
         outputImg.Position = 0;
         await sixLabors.SaveAsync(outputImg, new SixLabors.ImageSharp.Formats.Png.PngEncoder());
         outputImg.Seek(0, SeekOrigin.Begin);

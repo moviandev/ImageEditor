@@ -1,9 +1,8 @@
 namespace ImageEditor.Business.Models;
 public class User : Entity
 {
-    protected User(string name, string email)
+    protected User(string email)
     {
-        Name = name;
         Email = email;
         Images = new List<Image>();
     }
@@ -12,7 +11,6 @@ public class User : Entity
     {
     }
 
-    public string Name { get; protected set; }
     public string Email { get; protected set; }
 
     // Relationship with images
@@ -20,7 +18,7 @@ public class User : Entity
 
     public static class Builder
     {
-        public static User Create(string name, string email)
-            => new(name, email);
+        public static User Create(string email)
+            => new(email);
     }
 }
