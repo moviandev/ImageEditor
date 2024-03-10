@@ -1,5 +1,14 @@
 version: '3.8'
-
+name: image-editor-api
+services:
+    api:
+        container_name: image-editor-api
+        image: image-editor-api:latest
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Production
+            - ASPNETCORE_URLS=http://+:80
+        ports:
+          - 80:80
 services:
   db:
     image: postgres:latest
