@@ -1,5 +1,5 @@
-using Amazon;
 using ImageEditor.Api.Configurations;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,20 +8,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerConfiguration();
 
-if (builder.Environment.IsProduction())
-    builder.Configuration.AddSecretsManager(region: RegionEndpoint.SAEast1, configurator: options =>
-    {
-        options.SecretFilter = entry => entry.Name.StartsWith($"{builder.Environment.EnvironmentName}");
-        options.KeyGenerator = (_, s) => s
-            .Replace($"{builder.Environment.ApplicationName}_", string.Empty)
-            .Replace("__", ":");
-    });
-
 // Add dependencies
-builder.Services.ResolveDependencies(builder.Configuration);
+builder.Services.ResolveDependencies(builder.Configuration, builder.Environment);
 
 // Add Identity Configurations
-builder.Services.AddIdentityConfig(builder.Configuration);
+builder.Services.AddIdentityConfig(builder.Configuration, builder.Environment);
 
 // Add API Configurations
 builder.Services.AddApiConfig();
@@ -33,11 +24,8 @@ app.UseHttpsRedirection();
 app.MapControllers();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+var provider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
+app.UseSwaggerConfig(provider);
 
 app.UseHttpsRedirection();
 
