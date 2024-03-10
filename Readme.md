@@ -25,5 +25,5 @@ This tool has been released to facilitate our user life where they can apply som
 - After uploading the image and everything did go well the response od this controller will be your id in our Database
   <img src="./DocsImg/Screenshot 2024-03-10 at 5.08.43 PM.png" alt="Controller /api/v1/ApplyEffect response with success flag set to true and userId">
 - To retrieve all the images you uploaded into the app you make a request on GET /api/v1/GetAllImages?userId={GUID}
-  <img src="./DocsImg/Screenshot 2024-03-10 at 5.25.32 PM.png" alt="Endpoint request response sample">
+  <img src="./DocsImg/Screenshot 2024-03-10 at 5.41.46 PM.png" alt="Endpoint request response sample">
 - PS.: I've choose saving all the image original and edited in a S3 Bucket, I gave access to public so everyone can retrieve data from data bucket, also I save data in a Amazon RDS Postgres.
